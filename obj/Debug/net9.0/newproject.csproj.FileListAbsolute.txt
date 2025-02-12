@@ -1,0 +1,14 @@
+/home/jonstop1234/CSPROJECT/newproject/bin/Debug/net9.0/newproject
+/home/jonstop1234/CSPROJECT/newproject/bin/Debug/net9.0/newproject.deps.json
+/home/jonstop1234/CSPROJECT/newproject/bin/Debug/net9.0/newproject.runtimeconfig.json
+/home/jonstop1234/CSPROJECT/newproject/bin/Debug/net9.0/newproject.dll
+/home/jonstop1234/CSPROJECT/newproject/bin/Debug/net9.0/newproject.pdb
+/home/jonstop1234/CSPROJECT/newproject/obj/Debug/net9.0/newproject.GeneratedMSBuildEditorConfig.editorconfig
+/home/jonstop1234/CSPROJECT/newproject/obj/Debug/net9.0/newproject.AssemblyInfoInputs.cache
+/home/jonstop1234/CSPROJECT/newproject/obj/Debug/net9.0/newproject.AssemblyInfo.cs
+/home/jonstop1234/CSPROJECT/newproject/obj/Debug/net9.0/newproject.csproj.CoreCompileInputs.cache
+/home/jonstop1234/CSPROJECT/newproject/obj/Debug/net9.0/newproject.dll
+/home/jonstop1234/CSPROJECT/newproject/obj/Debug/net9.0/refint/newproject.dll
+/home/jonstop1234/CSPROJECT/newproject/obj/Debug/net9.0/newproject.pdb
+/home/jonstop1234/CSPROJECT/newproject/obj/Debug/net9.0/newproject.genruntimeconfig.cache
+/home/jonstop1234/CSPROJECT/newproject/obj/Debug/net9.0/ref/newproject.dll
