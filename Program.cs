@@ -46,7 +46,7 @@ class Program {
             }
         }
         
-        Console.WriteLine();
+        Console.WriteLine("next");
     }
     static void CreateAccount(string userName) {
         userPosts[userName] = new List<String>();
