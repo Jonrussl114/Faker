@@ -66,18 +66,12 @@ class Program {
             string options = Console.ReadLine();
             Console.WriteLine();
             if (options == "1") {
-                Console.Write($"\n{userName}: Create a post: ");
+                Console.Write($"{userName}: Create a post: ");
                 string post = Console.ReadLine();
 
                 if (post == null) {
                     Console.WriteLine("Invalid Input.");
                     continue;
-                }
-                if (post.ToLower() == "exit")
-                {
-                    activeUsers[userName] = false;
-                    Console.WriteLine($"[{userName}] has been logged off.");
-                    break;
                 }
                 lock (userPosts)
                 {
@@ -89,15 +83,45 @@ class Program {
                 {
                     Console.WriteLine("Create a post first!");
                 } else {
-                    List<string> reversePosts = new List<string>();
-                    reversePosts = userPosts[userName];
+                    List<string> reversePosts = userPosts[userName];
                     reversePosts.Reverse();
-                    foreach (var posts in userPosts[userName])
+                    foreach (var posts in reversePosts)
                     {
                         Console.WriteLine($"[You] posted: {posts}");
                     }
                 }
                 
+            } else if (options == "3")
+            {
+                foreach (var users in userPosts)
+                {
+                    if (users.Key.Equals(userName)) {
+                        List<string> reversePosts = new List<string>();
+                        reversePosts = userPosts[userName];
+                        reversePosts.Reverse();
+                        foreach (var posts in reversePosts)
+                        {
+                            Console.WriteLine($"[You] posted: {posts}");
+                        }
+                    } else {
+                        List<string> reversePosts = new List<string>();
+                        reversePosts = userPosts[users.Key];
+                        reversePosts.Reverse();
+                        foreach (var posts in reversePosts)
+                        {
+                            Console.WriteLine($"[{users.Key}] posted: {posts}");
+                        }
+                    }
+
+                    
+                }
+                
+            }
+            if (options.ToLower() == "exit")
+            {
+                activeUsers[userName] = false;
+                Console.WriteLine($"[{userName}] has been logged off.");
+                break;
             }
             Console.WriteLine();
         }
