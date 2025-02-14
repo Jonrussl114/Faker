@@ -12,3 +12,4 @@
 /home/jonstop1234/CSPROJECT/newproject/obj/Debug/net9.0/newproject.pdb
 /home/jonstop1234/CSPROJECT/newproject/obj/Debug/net9.0/newproject.genruntimeconfig.cache
 /home/jonstop1234/CSPROJECT/newproject/obj/Debug/net9.0/ref/newproject.dll
+/home/jonstop1234/CSPROJECT/newproject/obj/Debug/net9.0/newproject.sourcelink.json

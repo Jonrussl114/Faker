@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using ConsoleApp1;
 
 class Program {
-     static Dictionary<string, List<string>> userPosts = new();
+    static Dictionary<string, List<string>> userPosts = new();
     static List<Thread> userThreads = new();
     static Dictionary<string, bool> activeUsers = new();
     static void Main(string[] args) {
@@ -62,24 +62,44 @@ class Program {
         Console.WriteLine($"\n[{userName} is currently active] Type 'exit' to finish.");
         
         while (activeUsers[userName]) {
-            Console.Write($"\n{userName}: Create a post: ");
-            string post = Console.ReadLine();
+            Console.Write("Options:\n1. Create a post\n2. See all your post\n3. See all post\nSelection: ");
+            string options = Console.ReadLine();
+            Console.WriteLine();
+            if (options == "1") {
+                Console.Write($"\n{userName}: Create a post: ");
+                string post = Console.ReadLine();
 
-            if (post == null) {
-                Console.WriteLine("Invalid Input.");
-                continue;
+                if (post == null) {
+                    Console.WriteLine("Invalid Input.");
+                    continue;
+                }
+                if (post.ToLower() == "exit")
+                {
+                    activeUsers[userName] = false;
+                    Console.WriteLine($"[{userName}] has been logged off.");
+                    break;
+                }
+                lock (userPosts)
+                {
+                    userPosts[userName].Add(post);
+                    Console.WriteLine($"[{userName}] Has posted: {post}");
+                }
+            } else if (options == "2") {
+                if (!userPosts[userName].Any())
+                {
+                    Console.WriteLine("Create a post first!");
+                } else {
+                    List<string> reversePosts = new List<string>();
+                    reversePosts = userPosts[userName];
+                    reversePosts.Reverse();
+                    foreach (var posts in userPosts[userName])
+                    {
+                        Console.WriteLine($"[You] posted: {posts}");
+                    }
+                }
+                
             }
-            if (post.ToLower() == "exit")
-            {
-                activeUsers[userName] = false;
-                Console.WriteLine($"[{userName}] has been logged off.");
-                break;
-            }
-            lock (userPosts)
-            {
-                userPosts[userName].Add(post);
-                Console.WriteLine($"[{userName}] Has posted: {post}");
-            }
+            Console.WriteLine();
         }
     }
 
