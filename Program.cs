@@ -25,16 +25,16 @@ class Program {
                         activeUsers[key] = false;
 
                     break;
-            } else if (!userPosts.ContainsKey(userName)) {
-                userPosts[userName] = new List<string>(); // Initialize user’s post list
-                activeUsers[userName] = true;
+                } else if (!userPosts.ContainsKey(userName)) {
+                    userPosts[userName] = new List<string>(); // Initialize user’s post list
+                    activeUsers[userName] = true;
 
-                Thread userThread = new(() => UserThreadTask(userName));
-                userThreads.Add(userThread);
-                userThread.Start();
-            } else {
-                Console.WriteLine($"{userName} is already active.");
-            } 
+                    Thread userThread = new(() => UserThreadTask(userName));
+                    userThreads.Add(userThread);
+                    userThread.Start();
+                } else {
+                    Console.WriteLine($"{userName} is already active.");
+                } 
             /**
              else
                 {
