@@ -82,6 +82,7 @@ class Program {
                 activeUsers[username] = true;
             }
         }
+        
 
         userPosts[username] = new List<string>(); // Initialize posts
         activeUsers[username] = true;
