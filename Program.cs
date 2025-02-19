@@ -18,47 +18,7 @@ class Program {
             if (!userThreads.Any()) {
                 Console.WriteLine("You have not created an account.");
                 CreateAccount();
-            } /** else if (userThreads.Any())
-            {
-                Console.Write("\nCreate new account (new)\nSwitch account\n (new/switch/stop all): ");
-                string command = Console.ReadLine()?.Trim().ToLower() ?? "";
-
-                if (command == "stop all")
-                {
-                    Console.WriteLine("\nStopping all users...");
-                    foreach (var key in activeUsers.Keys)
-                        activeUsers[key] = false;
-                    break;
-                }
-                else if (command == "new")
-                {
-                    Console.Write("Create an account.\nUsername: @");
-                    string userName = Console.ReadLine();
-                    if (userName == null || userName == "")
-                        continue;
-
-                    if (userName.ToLower() == "stop all")
-                    {
-                        Console.WriteLine("\nStopping all users...");
-                        foreach (var key in activeUsers.Keys)
-                            activeUsers[key] = false;
-
-                        break;
-                    } else if (!userPosts.ContainsKey(userName)) {
-                        userPosts[userName] = new List<string>(); // Initialize user’s post list
-                        activeUsers[userName] = true;
-
-                        Thread userThread = new(() => UserThreadTask(userName));
-                        userThreads.Add(userThread);
-                        userThread.Start();
-                    }
-                }
-                else if (command == "switch")
-                {
-                    //SwitchAccount();
-                }
-            }
-            */
+            } 
         }
         
     }
@@ -84,7 +44,7 @@ class Program {
         }
         
 
-        userPosts[username] = new List<string>(); // Initialize posts
+        userPosts[username] = new List<string>();
         activeUsers[username] = true;
         Thread userThread = new(() => UserThreadTask(username));
         userThreads.Add(userThread);
@@ -146,10 +106,12 @@ class Program {
                         List<string> reversePosts = new List<string>();
                         reversePosts = userPosts[userName];
                         reversePosts.Reverse();
+                        Console.WriteLine();
                         foreach (var posts in reversePosts)
                         {
                             Console.WriteLine($"[You] posted: {posts}");
                         }
+                        Console.WriteLine();
                     } else {
                         List<string> reversePosts = new List<string>();
                         reversePosts = userPosts[users.Key];
