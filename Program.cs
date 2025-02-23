@@ -12,7 +12,7 @@ class Program {
     static bool running = true;
 
     static void Main(string[] args) {
-        Console.WriteLine("[Welcome to Faker]\n");
+        Console.WriteLine("[Welcome to Faker]\nType 'exit' to quit.");
         
         while (running)
         {   
