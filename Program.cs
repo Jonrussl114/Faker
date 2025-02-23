@@ -9,16 +9,18 @@ class Program {
     static string? currentUser = null;
     static object userPostLock = new();  // Lock for userPosts
     static object activeUserLock = new();
+    static bool running = true;
 
     static void Main(string[] args) {
         Console.WriteLine("[Welcome to Faker]\n");
         
-        while (true)
+        while (running)
         {   
             if (!userThreads.Any()) {
                 Console.WriteLine("You have not created an account.");
                 CreateAccount();
-            } 
+            }
+            
         }
         
     }
@@ -31,6 +33,11 @@ class Program {
             Console.WriteLine("Invalid username or username already exists.");
             SwitchAccount();
             return;
+        } else if (username == "exit")
+        {
+            Console.WriteLine("Stopping Faker... Goodbye!");
+            running = false;
+            Environment.Exit(0);
         }
 
         Console.WriteLine($"Account '{username}' created! Switching to {username}...");
@@ -43,16 +50,13 @@ class Program {
             }
         }
         
-
         userPosts[username] = new List<string>();
         activeUsers[username] = true;
         Thread userThread = new(() => UserThreadTask(username));
         userThreads.Add(userThread);
         userThread.Start();
 
-        
         currentUser = username;
-
     }
 
     static void UserThreadTask(string userName)
@@ -66,11 +70,11 @@ class Program {
                 continue;
             }
 
-            Console.Write("Options:\n1. Create a post\n2. See all your post\n3. See all post\n4. Switch account\n5. Exit\nSelection: ");
+            Console.Write("Options:\n1. Create a post\n2. See all your post\n3. See all post\n4. Switch account\n5. Exit\n6. Quit Faker\nSelection: ");
             string options = Console.ReadLine();
             Console.WriteLine();
             if (options == "1") {
-                Console.Write($"{userName}: Create a post: ");
+                Console.Write($"[{userName}]: Create a post: ");
                 string post = Console.ReadLine();
 
                 if (post == null) {
@@ -126,13 +130,17 @@ class Program {
             else if (options == "4")
             {
                 SwitchAccount();
-            }
-            if (options == "5")
+            } else if (options == "5")
             {
                 activeUsers[userName] = false;
                 Console.WriteLine($"[{userName}] has been logged off.");
                 CreateAccount();
                 break;
+            } else if (options == "6")
+            {
+                Console.WriteLine("Stopping Faker... Goodbye!");
+                running = false;
+                Environment.Exit(0);
             }
             Console.WriteLine();
         }
@@ -164,5 +172,5 @@ class Program {
         UserThreadTask(username);
         
     }
-
+    
 }
