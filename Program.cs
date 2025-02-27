@@ -138,9 +138,25 @@ class Program {
                 break;
             } else if (options == "6")
             {
+                Console.Write("Are you sure you want to quit Faker? (yes/no): ");
+                string confirmation = Console.ReadLine()?.Trim().ToLower() ?? "";
+
+                if (confirmation == "yes") {
                 Console.WriteLine("Stopping Faker... Goodbye!");
                 running = false;
+                foreach (var thread in userThreads)
+                {
+                    if (thread.IsAlive) 
+                    {
+                        thread.Join();  // Wait for thread to complete
+                    }
+                }
+                Console.WriteLine("All users have logged out. Goodbye!");
                 Environment.Exit(0);
+                } else
+                {
+                    Console.WriteLine("Quit canceled. Returning to menu...");
+                }
             }
             Console.WriteLine();
         }
