@@ -11,6 +11,11 @@ class Program {
     static object activeUserLock = new();
     static bool running = true;
 
+    /**
+     * Displays a welcome message and continuously checks if any user accounts exist.
+     * If no accounts are found, prompts the user to create one.
+     * The loop runs as long as the application is active.
+     */
     static void Main(string[] args) {
         Console.WriteLine("[Welcome to Faker]\nType 'exit' to quit.\n");
         
@@ -24,6 +29,13 @@ class Program {
         }
         
     }
+
+    /**
+     * Handles the creation of a new user account. Displays existing user posts before prompting the user for a new username.
+     * Ensures the username is unique and not empty. If the user enters "exit", prompts for confirmation before terminating the application.
+     * Properly shuts down all active user threads before exiting.
+     */
+
     static void CreateAccount() {
         foreach (var users in userPosts)
         {
@@ -45,11 +57,35 @@ class Program {
             SwitchAccount();
             return;
         } else if (username == "exit")
-        {
-            
-            Console.WriteLine("Stopping Faker... Goodbye!");
-            running = false;
-            Environment.Exit(0);
+        {   
+            Console.Write("Are you sure you want to quit Faker? (yes/no): ");
+            string confirmation = Console.ReadLine()?.Trim().ToLower() ?? "";
+
+            if (confirmation == "yes") {
+                Console.WriteLine("Stopping Faker... Goodbye!");
+                running = false;
+                lock (activeUserLock)
+                {
+                    foreach (var user in activeUsers.Keys)
+                    {
+                        activeUsers[user] = false;
+                    }
+                }
+                Thread.Sleep(500);
+
+                foreach (var thread in userThreads)
+                {
+                    if (thread.IsAlive) 
+                    {
+                        thread.Join(1000);  // Wait for thread to complete
+                    }
+                }
+                Console.WriteLine("All users have logged out. Goodbye!");
+                Environment.Exit(0);
+            } else
+            {
+                Console.WriteLine("Quit canceled. Returning to menu...");
+            }
         }
 
         Console.WriteLine($"Account '{username}' created! Switching to {username}...");
@@ -71,6 +107,12 @@ class Program {
         currentUser = username;
     }
 
+    /**
+     * Represents the main execution loop for a user's thread. Handles user interactions, such as creating posts,
+     * viewing posts, switching accounts, and logging out. Ensures proper synchronization using locks
+     * to prevent concurrent modification issues. Also provides an option to quit the application,
+     * gracefully shutting down all active threads before exiting.
+     */
     static void UserThreadTask(string userName)
     {
         Console.WriteLine($"\n[{userName} is currently active] Type 5 to finish.\n");
@@ -84,11 +126,11 @@ class Program {
             }
 
             Console.Write("Options:\n1. Create a post\n2. See all your post\n3. See all post\n4. Switch account\n5. Exit\n6. Quit Faker\nSelection: ");
-            string options = Console.ReadLine();
+            string options = Console.ReadLine()?.Trim().ToLower() ?? "";
             Console.WriteLine();
             if (options == "1") {
                 Console.Write($"[{userName}]: Create a post: ");
-                string post = Console.ReadLine();
+                string post = Console.ReadLine()?.Trim().ToLower() ?? "";
 
                 if (post == null) {
                     Console.WriteLine("Invalid Input.");
@@ -184,6 +226,12 @@ class Program {
         }
     }
 
+    /**
+     * Switches the current active user to another existing account. Ensures thread safety
+     * by using locks to manage shared resources, such as active user states. If the provided 
+     * username does not exist, an error message is displayed. Once switched, the new user 
+     * session begins execution.
+     */
     static void SwitchAccount() {
         Console.Write("\nEnter username to switch to: ");
         string username = Console.ReadLine()?.Trim() ?? "";
