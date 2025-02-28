@@ -25,6 +25,17 @@ class Program {
         
     }
     static void CreateAccount() {
+        foreach (var users in userPosts)
+        {
+            List<string> reversePosts = new List<string>();
+            reversePosts = userPosts[users.Key];
+            reversePosts.Reverse();
+            foreach (var posts in reversePosts)
+            {
+                Console.WriteLine($"[{users.Key}] posted: {posts}");
+            }
+        }
+
         Console.Write("\nEnter new username: @");
         string username = Console.ReadLine()?.Trim() ?? "";
 
@@ -35,6 +46,7 @@ class Program {
             return;
         } else if (username == "exit")
         {
+            
             Console.WriteLine("Stopping Faker... Goodbye!");
             running = false;
             Environment.Exit(0);
@@ -63,7 +75,8 @@ class Program {
     {
         Console.WriteLine($"\n[{userName} is currently active] Type 5 to finish.\n");
         
-        while (activeUsers[userName]) {
+        while (running && activeUsers[userName] && activeUsers.ContainsKey(userName)) {
+            if (!running || !activeUsers.ContainsKey(userName) || !activeUsers[userName]) break;
             if (currentUser != userName)
             {
                 Thread.Sleep(100); // Prevents unnecessary CPU usage when switched
@@ -142,17 +155,26 @@ class Program {
                 string confirmation = Console.ReadLine()?.Trim().ToLower() ?? "";
 
                 if (confirmation == "yes") {
-                Console.WriteLine("Stopping Faker... Goodbye!");
-                running = false;
-                foreach (var thread in userThreads)
-                {
-                    if (thread.IsAlive) 
+                    Console.WriteLine("Stopping Faker... Goodbye!");
+                    running = false;
+                    lock (activeUserLock)
                     {
-                        thread.Join();  // Wait for thread to complete
+                        foreach (var user in activeUsers.Keys)
+                        {
+                            activeUsers[user] = false;
+                        }
                     }
-                }
-                Console.WriteLine("All users have logged out. Goodbye!");
-                Environment.Exit(0);
+                    Thread.Sleep(500);
+
+                    foreach (var thread in userThreads)
+                    {
+                        if (thread.IsAlive) 
+                        {
+                            thread.Join(1000);  // Wait for thread to complete
+                        }
+                    }
+                    Console.WriteLine("All users have logged out. Goodbye!");
+                    Environment.Exit(0);
                 } else
                 {
                     Console.WriteLine("Quit canceled. Returning to menu...");
